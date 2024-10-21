@@ -102,7 +102,7 @@ By running php artisan migrate --seed, some default data will be inserted:
 ## Testing and Debugging
 - Use the Laravel Tinker tool for testing database queries:
     ```bash
-    php artisan 
+    php artisan tinker
 - For viewing logs, use:
     ```bash
     tail -f storage/logs/laravel.log
