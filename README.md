@@ -1,130 +1,108 @@
-Documentation: Laravel Product Management Application
-Table of Contents
-Project Setup
-Database Migrations
-Using the Cart
-Checkout Process
-Order Management for Admin
-1. Project Setup
-Prerequisites
-PHP 8.1+
-Composer
-MySQL or any compatible database
-Laravel 10+
-Steps for Setup
-Clone the Repository
+# Laravel Product Management and Shopping Cart Application
 
-bash
-Copy code
-git clone <repository-url>
-cd project-directory
-Install Dependencies Run the following command to install Laravel dependencies:
+## Overview
+This is a Laravel application that includes product management with role-based access control and a shopping cart feature. Admin users can manage products and view orders, while regular users can add products to their cart and proceed through the checkout process.
 
-bash
-Copy code
-composer install
-Environment Configuration
+## Features
+- Role-based authentication using Laravel Breeze.
+- Admin users can create, edit, update, and delete products.
+- Users can add products to a cart, view their cart, and proceed to checkout.
+- Order management for Admins, allowing them to view user orders and order details.
 
-Duplicate the .env.example file and rename it to .env.
-Update the .env file with your database credentials:
-env
-Copy code
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=your_database_name
-DB_USERNAME=your_username
-DB_PASSWORD=your_password
-Generate Application Key Generate the application key for Laravel:
+## Prerequisites
+- PHP 8.1 or higher
+- Composer
+- MySQL or another compatible database
+- Node.js and npm (for frontend assets)
 
-bash
-Copy code
-php artisan key:generate
-Run Migrations Migrate the database to create the necessary tables:
+## Project Setup
 
-bash
-Copy code
-php artisan migrate
-Seed Admin User (Optional) If you have set up seeding for creating an admin user, run:
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/Soyelliton/product-management-app.git
+   cd product-management-app
+2. **Install PHP dependencies:**
+   ```bash
+   composer install
+3. **Install JavaScript dependencies:**
+   ```bash
+   npm install && npm run dev
+4. **Environment Configuration:**
+   - Copy the .env.example file to create a .env file.
+   - Set your database credentials in the .env file:
+   ```bash
+   DB_CONNECTION=mysql
+    DB_HOST=127.0.0.1
+    DB_PORT=3306
+    DB_DATABASE=your_database_name
+    DB_USERNAME=your_database_user
+    DB_PASSWORD=your_database_password
+5. **Generate Application Key:**
+   ```bash
+   php artisan key:generate
+6. **Run Migrations and Seeders:**
+- This command will create the necessary database tables and insert default data.
+    ```bash
+    php artisan migrate --seed
+7. **Start the development server:**
+    ```bash
+    php artisan serve
+8. **Access the Application:**Open your browser and navigate to:
+    ```bash
+    http://localhost:8000
+## User Roles
+- **Admin:** Can manage products and view all user orders.
+- **User:** Can view products, add them to the cart, and place orders.
 
-bash
-Copy code
-php artisan db:seed --class=AdminUserSeeder
-Run the Server Start the development server:
+## Product Management (Admin Only)
 
-bash
-Copy code
-php artisan serve
-Access the Application Open your browser and navigate to:
+Admins can manage products through the following routes:
 
-arduino
-Copy code
-http://localhost:8000
-2. Database Migrations
-The database consists of the following tables:
+- View all products: /products
+- Create a new product: /products/create
+- Edit a product: /products/{id}/edit
 
-users: Stores user information, including roles (e.g., 'admin', 'user').
-products: Stores product details such as name, description, price, and quantity.
-orders: Tracks each order with user_id, total, and status.
-order_items: Stores individual items for each order with order_id, product_id, quantity, and price.
-Ensure you have migrated the tables using:
+## Cart and Checkout
+### Adding Products to Cart
+- Visit the product listing page as a user and click "Add to Cart" for any product.
+- The cart data is stored in the session until the user proceeds to checkout.
 
-bash
-Copy code
-php artisan migrate
-If you need to create an admin user for testing, you can create it directly in the database or by using a seeder with an 'admin' role.
+## Viewing Cart
+- Visit /cart to view items currently in the cart.
+- Users can update the quantity or remove items from the cart.
+## Checkout Process
+- Visit /checkout to proceed with the checkout.
+- Login or register if not already authenticated (required for placing an order).
+- Complete the checkout process to place an order.
+- After a successful order, the cart will be cleared.
 
-3. Using the Cart
-The cart allows users to add products and manage them before proceeding to checkout. Here’s how the cart functionality works:
+## Order Management (Admin Only)
+Admins can view all user orders and their details through the following routes:
 
-Adding Products to the Cart
+- View all orders: /admin/orders
+- View specific order details: /admin/orders/{order}
+## Database Migrations
+The following tables are used in the project:
 
-Browse the products on the home page.
-Click the "Add to Cart" button on a product.
-The cart will store items using Laravel sessions for guest users.
-For logged-in users, the cart is still session-based, allowing them to modify their cart before placing an order.
-Viewing the Cart
+- **users:** Stores user information, including roles (Admin or User).
+- **products:** Stores product details such as name, description, price, and quantity.
+- **orders:** Stores order information, including user ID and total amount.
+- **order_items:** Stores each item associated with an order, including product ID, quantity, and price.
 
-Navigate to the cart page (e.g., /cart).
-View the list of products added to the cart, along with their quantities and prices.
-Adjust quantities or remove items directly from the cart.
-Cart Summary
+    To run the migrations manually, use:
+    ```bash
+    php artisan migrate
 
-The cart page displays a summary of the total price.
-If the cart is empty, users are shown a message indicating that their cart is empty.
-4. Checkout Process
-To proceed with a purchase, users must be registered and logged in. The checkout process involves the following steps:
+## Seeders
+By running php artisan migrate --seed, some default data will be inserted:
 
-Log In or Register
+- An admin user for testing (email: admin@gmail.com, password: 12345678)
+- Some sample products.
 
-Users must log in or create an account to proceed to checkout.
-The login and registration pages are available at /login and /register.
-Proceed to Checkout
-
-Once logged in, navigate to the cart page.
-Click the "Checkout" button to proceed with the order.
-The checkout page will display the order summary and the total amount.
-Placing an Order
-
-After reviewing the order, click "Place Order" to finalize the purchase.
-The order is saved in the orders and order_items tables.
-The cart is cleared after the order is placed successfully.
-Users are redirected to a page showing their order details and a success message.
-Viewing User Orders
-
-Users can view their order history by navigating to a page (e.g., /user-orders).
-This page lists all past orders and provides links to view order details.
-5. Order Management for Admin
-Admin users can manage all orders placed by users through the following steps:
-
-Accessing the Admin Dashboard
-
-After logging in as an admin, navigate to the admin dashboard (e.g., /dashboard).
-Managing Products
-
-Click on the "Product Management" button to view, add, edit, or delete products.
-Viewing and Managing Orders
-
-Click on the "Order Management" button to view all orders.
-The list shows order details, including the user who placed the order, the total amount, and the order status.
-Admins can update the status of orders (e.g., 'pending', 'shipped', 'delivered').
+## Testing and Debugging
+- Use the Laravel Tinker tool for testing database queries:
+    ```bash
+    php artisan 
+- For viewing logs, use:
+    ```bash
+    tail -f storage/logs/laravel.log
